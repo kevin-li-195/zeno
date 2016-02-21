@@ -13,9 +13,10 @@ At first (or upon reset), the boundary will be at the edges of the screen.
 The search area halves each time (e.g. if you move the cursor left, then the right boundary will be at
 the cursor's original position). The cursor can also be reset to the center of the screen by pressing C.
 
-In move mode, the cursor can be manipulated at a more finer grained level by using the arrow keys. (Not implemented)
+After switching to move mode,
+the cursor can be manipulated at a more finer grained level using the same bindings. (Not implemented yet)
 
-Clicking is done by pressing Enter.
+Clicking is done by pressing Enter (with the mod key held down).
 
 To do
 -----
