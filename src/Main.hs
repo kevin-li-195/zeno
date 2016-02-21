@@ -50,45 +50,39 @@ movePointer d w dir curX curY leftBound rightBound topBound botBound = do
 -- to determine action (direction, click, reset, or exit)
 searchHelper :: Display -> Window -> Screen -> Boundary -> Boundary -> Boundary -> Boundary -> XEventPtr -> IO ()
 searchHelper d w s leftBound rightBound topBound botBound ptr = do
-    print "waiting for key event"
     nextEvent d ptr
-    print "finished waiting for key event"
     (_, _, _, badCurX, badCurY, _, _, _, _, _) <- get_KeyEvent ptr
     evType <- get_EventType ptr
-    print "got key event"
     let curX = fromIntegral badCurX
         curY = fromIntegral badCurY
     (a, str) <- lookupString $ asKeyEvent ptr
-    print str
+    putStrLn $ "Left bound is: " ++ (show leftBound)
+    putStrLn $ "Right bound is: " ++ (show rightBound)
+    putStrLn $ "Top bound is: " ++ (show topBound)
+    putStrLn $ "Bot bound is: " ++ (show botBound)
     if evType == 2 then
         case a of
             Just a ->
                 case str of
                     "l" -> do
-                        putStrLn "moving right"
                         movePointer d w DRight curX curY leftBound rightBound topBound botBound
-                        searchHelper d w s (leftBound `div` 2) rightBound topBound botBound ptr
+                        searchHelper d w s ((rightBound + leftBound) `div` 2) rightBound topBound botBound ptr
                     "h" -> do 
-                        putStrLn "moving left"
                         movePointer d w DLeft curX curY leftBound rightBound topBound botBound
-                        searchHelper d w s leftBound (rightBound `div` 2) topBound botBound ptr
+                        searchHelper d w s leftBound ((rightBound + leftBound) `div` 2) topBound botBound ptr
                     "j" -> do
-                        putStrLn "moving down"
                         movePointer d w DDown curX curY leftBound rightBound topBound botBound
-                        searchHelper d w s leftBound rightBound (topBound `div` 2) botBound ptr
+                        searchHelper d w s leftBound rightBound ((botBound + topBound) `div` 2) botBound ptr
                     "k" -> do
-                        putStrLn "moving up"
                         movePointer d w DUp curX curY leftBound rightBound topBound botBound
-                        searchHelper d w s leftBound rightBound topBound (botBound `div` 2) ptr
+                        searchHelper d w s leftBound rightBound topBound ((botBound + topBound) `div` 2) ptr
                     "c" -> do
-                        putStrLn "resetting"
                         let (maxX, maxY) = getBoundaries s
                         warpPointer d 0 w 0 0 0 0 (fromIntegral $ maxX `div` 2) (fromIntegral maxY `div` 2)
-                        searchHelper d w s 0 maxX 0 topBound ptr
+                        searchHelper d w s 0 maxX 0 maxY ptr
                     "q" -> do
-                        putStrLn "quitting"
                         return ()
-                    "\n" -> do
+                    "\r" -> do
                         putStrLn "click"
                     _ -> do
                         putStrLn "didn't get referenced key"
@@ -113,7 +107,7 @@ main = do
             nextEvent dsp ptr
             p <- get_EventType ptr
             case p of
-                3 -> do
+                2 -> do
                     print "got hook key" 
                     search dsp win scr ptr
                 _ -> return ()
