@@ -22,4 +22,3 @@ To do
 -----
 - Refactor code and reset boundaries when the mod key is released. (can we reduce key grabbing?)
 - Implement move mode.
-- Implement clicks
