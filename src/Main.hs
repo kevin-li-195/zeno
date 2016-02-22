@@ -2,6 +2,7 @@ import Control.Applicative
 import Control.Monad
 import Data.Time.Clock.POSIX
 import Graphics.X11.Xlib
+import qualified Graphics.X11.XTest as XT
 
 data Direction = DUp | DDown | DLeft | DRight
 type Boundary = Integer
@@ -78,7 +79,14 @@ searchHelper d w s leftBound rightBound topBound botBound ptr = do
                     "q" -> do
                         return ()
                     "\r" -> do
-                        putStrLn "click"
+                        XT.fakeButtonPress d 1
+                        searchHelper d w s leftBound rightBound topBound botBound ptr
+                    "n" -> do
+                        XT.fakeButtonPress d 1
+                        searchHelper d w s leftBound rightBound topBound botBound ptr
+                    "m" -> do
+                        XT.fakeButtonPress d 3
+                        searchHelper d w s leftBound rightBound topBound botBound ptr
                     _ -> do
                         searchHelper d w s leftBound rightBound topBound botBound ptr
             Nothing -> do
@@ -93,7 +101,7 @@ main = do
     win <- rootWindow dsp screenNum
     kc <- hookKey
 
-    grabKey dsp (fromIntegral 133) 0 win False grabModeAsync grabModeAsync
+    grabKey dsp 133 0 win False grabModeAsync grabModeAsync
 
     allocaXEvent $ \ptr -> do
         forever $ do
@@ -101,6 +109,5 @@ main = do
             p <- get_EventType ptr
             case p of
                 2 -> do
-                    print "got hook key" 
                     search dsp win scr ptr
                 _ -> return ()
