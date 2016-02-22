@@ -1,3 +1,4 @@
+import Control.Applicative
 import Control.Monad
 import Data.Time.Clock.POSIX
 import Graphics.X11.Xlib
@@ -30,10 +31,8 @@ search :: Display -> Window -> Screen -> XEventPtr -> IO ()
 search d w s ptr = do
     t <- getTime
     grabKeyboard d w True grabModeSync grabModeSync t
-    putStrLn "grabbed keyboard"
     let (maxX, maxY) = getBoundaries s
     searchHelper d w s 0 maxX 0 maxY ptr
-    putStrLn "searchhelper terminated"
     newT <- getTime
     ungrabKeyboard d newT
 
@@ -56,13 +55,9 @@ searchHelper d w s leftBound rightBound topBound botBound ptr = do
     let curX = fromIntegral badCurX
         curY = fromIntegral badCurY
     (a, str) <- lookupString $ asKeyEvent ptr
-    putStrLn $ "Left bound is: " ++ (show leftBound)
-    putStrLn $ "Right bound is: " ++ (show rightBound)
-    putStrLn $ "Top bound is: " ++ (show topBound)
-    putStrLn $ "Bot bound is: " ++ (show botBound)
-    if evType == 2 then
-        case a of
-            Just a ->
+    if evType == 2
+        then case a of
+            Just _ ->
                 case str of
                     "l" -> do
                         movePointer d w DRight curX curY leftBound rightBound topBound botBound
@@ -76,7 +71,7 @@ searchHelper d w s leftBound rightBound topBound botBound ptr = do
                     "k" -> do
                         movePointer d w DUp curX curY leftBound rightBound topBound botBound
                         searchHelper d w s leftBound rightBound topBound ((botBound + topBound) `div` 2) ptr
-                    "c" -> do
+                    "e" -> do
                         let (maxX, maxY) = getBoundaries s
                         warpPointer d 0 w 0 0 0 0 (fromIntegral $ maxX `div` 2) (fromIntegral maxY `div` 2)
                         searchHelper d w s 0 maxX 0 maxY ptr
@@ -85,12 +80,10 @@ searchHelper d w s leftBound rightBound topBound botBound ptr = do
                     "\r" -> do
                         putStrLn "click"
                     _ -> do
-                        putStrLn "didn't get referenced key"
                         searchHelper d w s leftBound rightBound topBound botBound ptr
             Nothing -> do
-                putStrLn "didn't get right symbol"
                 searchHelper d w s leftBound rightBound topBound botBound ptr
-    else searchHelper d w s leftBound rightBound topBound botBound ptr
+        else searchHelper d w s leftBound rightBound topBound botBound ptr
 
 main :: IO ()
 main = do
