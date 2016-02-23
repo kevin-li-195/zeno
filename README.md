@@ -22,3 +22,7 @@ To do
 -----
 - Refactor code and reset boundaries when the mod key is released. (can we reduce key grabbing?)
 - Implement move mode.
+
+Notes
+-----
+- Build depends on the C Xtst library. On Debian systems, this can be installed with `sudo apt-get install libxtst-dev`
