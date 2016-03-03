@@ -38,7 +38,9 @@ To do
 -----
 - Refactor code and reset boundaries when the mod key is released. (can we reduce key grabbing?)
 - Implement move mode.
+- Known issue: holding LMB button (currently 'N') causes repeated clicking and not the desired 'click-and-hold' behavior.
 
 Notes
 -----
 - Build depends on the C Xtst library. On Debian systems, this can be installed with `sudo apt-get install libxtst-dev`
+
