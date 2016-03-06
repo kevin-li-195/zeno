@@ -39,6 +39,7 @@ To do
 - Refactor code and reset boundaries when the mod key is released. (can we reduce key grabbing?)
 - Implement move mode.
 - Known issue: holding LMB button (currently 'N') causes repeated clicking and not the desired 'click-and-hold' behavior.
+- Known issue: Zeno stops working after computer goes to sleep (screen off? Needs more experimentation.)
 
 Notes
 -----
