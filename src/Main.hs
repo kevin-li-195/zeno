@@ -96,7 +96,7 @@ searchHelper d w s leftBound rightBound topBound botBound ptr = do
                     "l" -> do
                         move DRight
                         rec
-                            (rightBound + leftBound `div` 2)
+                            ((rightBound + leftBound) `div` 2)
                             rightBound
                             topBound
                             botBound
@@ -104,7 +104,7 @@ searchHelper d w s leftBound rightBound topBound botBound ptr = do
                         move DLeft
                         rec
                             leftBound
-                            (rightBound + leftBound `div` 2)
+                            ((rightBound + leftBound) `div` 2)
                             topBound
                             botBound
                     "j" -> do
@@ -112,7 +112,7 @@ searchHelper d w s leftBound rightBound topBound botBound ptr = do
                         rec
                             leftBound
                             rightBound
-                            (botBound + topBound `div` 2)
+                            ((botBound + topBound) `div` 2)
                             botBound
                     "k" -> do
                         move DUp
@@ -120,10 +120,10 @@ searchHelper d w s leftBound rightBound topBound botBound ptr = do
                             leftBound
                             rightBound
                             topBound
-                            (botBound + topBound `div` 2)
+                            ((botBound + topBound) `div` 2)
                     "e" -> do
                         warpPointer d 0 w 0 0 0 0
-                            (fromIntegral $ maxX `div` 2)
+                            (fromIntegral maxX `div` 2)
                             (fromIntegral maxY `div` 2)
                         searchHelper d w s 0 maxX 0 maxY ptr
                     "\r" -> XT.fakeButtonPress d 1 *> recAsIs
