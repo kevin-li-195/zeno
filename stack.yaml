@@ -1,0 +1,5 @@
+packages:
+  - .
+resolver: lts-10.7
+extra-deps:
+  - xtest-0.2
