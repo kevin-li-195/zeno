@@ -7,6 +7,11 @@ import qualified Graphics.X11.XTest as XT
 data Direction = DUp | DDown | DLeft | DRight
 type Boundary = Integer
 
+-- | /Configurable/
+-- The key code used to trigger the zeno interactions.
+zenoKey :: KeyCode
+zenoKey = 108
+
 getTime :: IO Time
 getTime = floor <$> getPOSIXTime
 
@@ -141,7 +146,7 @@ main = do
     win <- rootWindow dsp screenNum
     kc <- hookKey
 
-    grabKey dsp 133 0 win False grabModeAsync grabModeAsync
+    grabKey dsp zenoKey 0 win False grabModeAsync grabModeAsync
 
     allocaXEvent $ \ptr -> do
         forever $ do
